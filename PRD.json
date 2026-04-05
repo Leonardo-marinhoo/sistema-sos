@@ -1,0 +1,1280 @@
+{
+  "exportedAt": "2026-04-04T02:26:15.029Z",
+  "tables": {
+    "acceptance_criteria": [
+      {
+        "id": 1,
+        "requirement_id": "req-rf01",
+        "order_index": 1,
+        "criterion": "Criar usuario com perfil Administrador, Tecnico de Seguranca ou Colaborador."
+      },
+      {
+        "id": 2,
+        "requirement_id": "req-rf01",
+        "order_index": 2,
+        "criterion": "Permitir ativar e desativar usuario sem apagar historico."
+      },
+      {
+        "id": 3,
+        "requirement_id": "req-rf01",
+        "order_index": 3,
+        "criterion": "Mostrar quem criou o usuario e quando."
+      },
+      {
+        "id": 4,
+        "requirement_id": "req-rf02",
+        "order_index": 1,
+        "criterion": "Criar grupos de permissao por empresa."
+      },
+      {
+        "id": 5,
+        "requirement_id": "req-rf02",
+        "order_index": 2,
+        "criterion": "Adicionar e remover permissoes por grupo."
+      },
+      {
+        "id": 6,
+        "requirement_id": "req-rf02",
+        "order_index": 3,
+        "criterion": "Bloquear acao sem permissao com mensagem clara."
+      },
+      {
+        "id": 7,
+        "requirement_id": "req-rnf01",
+        "order_index": 1,
+        "criterion": "Toda autorizacao e negacao deve gerar log de auditoria."
+      },
+      {
+        "id": 8,
+        "requirement_id": "req-rnf01",
+        "order_index": 2,
+        "criterion": "Log deve ter usuario, acao, entidade e data."
+      },
+      {
+        "id": 9,
+        "requirement_id": "req-rf03",
+        "order_index": 1,
+        "criterion": "Cadastrar e editar cargos por empresa."
+      },
+      {
+        "id": 10,
+        "requirement_id": "req-rf03",
+        "order_index": 2,
+        "criterion": "Nao permitir cargo duplicado na mesma empresa."
+      },
+      {
+        "id": 11,
+        "requirement_id": "req-rf04",
+        "order_index": 1,
+        "criterion": "Associar varios EPIs a um cargo."
+      },
+      {
+        "id": 12,
+        "requirement_id": "req-rf04",
+        "order_index": 2,
+        "criterion": "Definir quantidade e se cada item e obrigatorio."
+      },
+      {
+        "id": 13,
+        "requirement_id": "req-rf04",
+        "order_index": 3,
+        "criterion": "Colaborador herda kit conforme cargo atual."
+      },
+      {
+        "id": 14,
+        "requirement_id": "req-rnf02",
+        "order_index": 1,
+        "criterion": "Toda mudanca no kit cria nova versao no historico."
+      },
+      {
+        "id": 15,
+        "requirement_id": "req-rnf02",
+        "order_index": 2,
+        "criterion": "Historico mostra autor e data da mudanca."
+      },
+      {
+        "id": 16,
+        "requirement_id": "req-rf05",
+        "order_index": 1,
+        "criterion": "Cadastrar EPI com codigo unico por empresa."
+      },
+      {
+        "id": 17,
+        "requirement_id": "req-rf05",
+        "order_index": 2,
+        "criterion": "Definir validade padrao em dias para cada EPI."
+      },
+      {
+        "id": 18,
+        "requirement_id": "req-rf06",
+        "order_index": 1,
+        "criterion": "Somente usuario autorizado pode registrar entrega."
+      },
+      {
+        "id": 19,
+        "requirement_id": "req-rf06",
+        "order_index": 2,
+        "criterion": "Entrega exige assinatura e foto de comprovacao."
+      },
+      {
+        "id": 20,
+        "requirement_id": "req-rf06",
+        "order_index": 3,
+        "criterion": "Salvar colaborador, EPI, quantidade e data da entrega."
+      },
+      {
+        "id": 21,
+        "requirement_id": "req-rf07",
+        "order_index": 1,
+        "criterion": "Colaborador pode solicitar troca pelo app quando necessario."
+      },
+      {
+        "id": 22,
+        "requirement_id": "req-rf07",
+        "order_index": 2,
+        "criterion": "Solicitacao pede motivo e permite anexar foto."
+      },
+      {
+        "id": 23,
+        "requirement_id": "req-rf07",
+        "order_index": 3,
+        "criterion": "Fluxo da troca deve ter status de abertura ate conclusao."
+      },
+      {
+        "id": 24,
+        "requirement_id": "req-rf08",
+        "order_index": 1,
+        "criterion": "Enviar alerta automatico antes do vencimento do EPI."
+      },
+      {
+        "id": 25,
+        "requirement_id": "req-rf08",
+        "order_index": 2,
+        "criterion": "Aviso mostra usuario, EPI e prazo final."
+      },
+      {
+        "id": 26,
+        "requirement_id": "req-rnf03",
+        "order_index": 1,
+        "criterion": "Manter metadados das evidencias ligados ao registro principal."
+      },
+      {
+        "id": 27,
+        "requirement_id": "req-rnf03",
+        "order_index": 2,
+        "criterion": "Guardar link dos anexos sem salvar arquivo bruto no banco."
+      },
+      {
+        "id": 28,
+        "requirement_id": "req-rf09",
+        "order_index": 1,
+        "criterion": "Cadastrar atividade de risco com codigo e norma."
+      },
+      {
+        "id": 29,
+        "requirement_id": "req-rf09",
+        "order_index": 2,
+        "criterion": "Permitir usar uma ou mais atividades na PT."
+      },
+      {
+        "id": 30,
+        "requirement_id": "req-rf10",
+        "order_index": 1,
+        "criterion": "PT so aprova com checklist completo."
+      },
+      {
+        "id": 31,
+        "requirement_id": "req-rf10",
+        "order_index": 2,
+        "criterion": "PT registra assinatura do colaborador e do tecnico."
+      },
+      {
+        "id": 32,
+        "requirement_id": "req-rf10",
+        "order_index": 3,
+        "criterion": "PT permite anexar fotos de evidencia."
+      },
+      {
+        "id": 33,
+        "requirement_id": "req-rnf04",
+        "order_index": 1,
+        "criterion": "PT aprovada precisa de data de validade obrigatoria."
+      },
+      {
+        "id": 34,
+        "requirement_id": "req-rnf04",
+        "order_index": 2,
+        "criterion": "PT vencida fica bloqueada para uso."
+      },
+      {
+        "id": 35,
+        "requirement_id": "req-rf11",
+        "order_index": 1,
+        "criterion": "Registrar risco, severidade e plano de mitigacao."
+      },
+      {
+        "id": 36,
+        "requirement_id": "req-rf11",
+        "order_index": 2,
+        "criterion": "Acompanhar analise por status ate encerramento."
+      },
+      {
+        "id": 37,
+        "requirement_id": "req-rnf05",
+        "order_index": 1,
+        "criterion": "Aceitar apenas niveis de severidade predefinidos."
+      },
+      {
+        "id": 38,
+        "requirement_id": "req-rnf05",
+        "order_index": 2,
+        "criterion": "Bloquear salvamento de registro incompleto."
+      },
+      {
+        "id": 39,
+        "requirement_id": "req-rf12",
+        "order_index": 1,
+        "criterion": "Somente tecnico autorizado pode criar relatorio."
+      },
+      {
+        "id": 40,
+        "requirement_id": "req-rf12",
+        "order_index": 2,
+        "criterion": "Relatorio permite apontamentos e anexos."
+      },
+      {
+        "id": 41,
+        "requirement_id": "req-rnf06",
+        "order_index": 1,
+        "criterion": "Apontamento deve exibir autor, data e status."
+      },
+      {
+        "id": 42,
+        "requirement_id": "req-rnf06",
+        "order_index": 2,
+        "criterion": "Toda alteracao fica salva no historico."
+      },
+      {
+        "id": 43,
+        "requirement_id": "req-rf13",
+        "order_index": 1,
+        "criterion": "Centralizar documentos por categoria e validade."
+      },
+      {
+        "id": 44,
+        "requirement_id": "req-rf13",
+        "order_index": 2,
+        "criterion": "Salvar link do arquivo e responsavel."
+      },
+      {
+        "id": 45,
+        "requirement_id": "req-rnf07",
+        "order_index": 1,
+        "criterion": "Documento vencido muda status automaticamente para EXPIRED."
+      },
+      {
+        "id": 46,
+        "requirement_id": "req-rnf07",
+        "order_index": 2,
+        "criterion": "Responsavel recebe aviso antes de vencer."
+      },
+      {
+        "id": 47,
+        "requirement_id": "req-rf14",
+        "order_index": 1,
+        "criterion": "Notificacao deve sempre ter usuario destinatario."
+      },
+      {
+        "id": 48,
+        "requirement_id": "req-rf14",
+        "order_index": 2,
+        "criterion": "Usuario pode marcar notificacao como lida."
+      },
+      {
+        "id": 49,
+        "requirement_id": "req-rf15",
+        "order_index": 1,
+        "criterion": "Registros operacionais exigem campo created_by_user_id."
+      },
+      {
+        "id": 50,
+        "requirement_id": "req-rf15",
+        "order_index": 2,
+        "criterion": "Sistema bloqueia gravacao sem autor."
+      },
+      {
+        "id": 51,
+        "requirement_id": "req-rnf08",
+        "order_index": 1,
+        "criterion": "Evento de auditoria so permite insercao, sem edicao comum."
+      },
+      {
+        "id": 52,
+        "requirement_id": "req-rnf08",
+        "order_index": 2,
+        "criterion": "Qualquer manutencao especial deve ser controlada."
+      }
+    ],
+    "audit_events": [],
+    "document_acknowledgements": [],
+    "documents": [],
+    "epi_deliveries": [],
+    "epi_exchange_requests": [],
+    "epis": [
+      {
+        "id": "epi-capacete",
+        "tenant_id": "tenant-sos-default",
+        "code": "EPI001",
+        "name": "Capacete de Seguranca",
+        "category": "Cabeca",
+        "default_validity_days": 365,
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "epi-luva",
+        "tenant_id": "tenant-sos-default",
+        "code": "EPI002",
+        "name": "Luva de Protecao",
+        "category": "Maos",
+        "default_validity_days": 180,
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "epi-bota",
+        "tenant_id": "tenant-sos-default",
+        "code": "EPI003",
+        "name": "Bota de Seguranca",
+        "category": "Pes",
+        "default_validity_days": 365,
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "job_required_epis": [
+      {
+        "job_id": "job-tecnico-seguranca",
+        "epi_id": "epi-capacete",
+        "required_quantity": 1,
+        "is_mandatory": 1
+      },
+      {
+        "job_id": "job-tecnico-seguranca",
+        "epi_id": "epi-bota",
+        "required_quantity": 1,
+        "is_mandatory": 1
+      },
+      {
+        "job_id": "job-operador-campo",
+        "epi_id": "epi-capacete",
+        "required_quantity": 1,
+        "is_mandatory": 1
+      },
+      {
+        "job_id": "job-operador-campo",
+        "epi_id": "epi-luva",
+        "required_quantity": 1,
+        "is_mandatory": 1
+      },
+      {
+        "job_id": "job-operador-campo",
+        "epi_id": "epi-bota",
+        "required_quantity": 1,
+        "is_mandatory": 1
+      }
+    ],
+    "jobs": [
+      {
+        "id": "job-tecnico-seguranca",
+        "tenant_id": "tenant-sos-default",
+        "name": "Tecnico de Seguranca",
+        "description": "Profissional responsavel por validacoes tecnicas de seguranca",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "job-operador-campo",
+        "tenant_id": "tenant-sos-default",
+        "name": "Operador de Campo",
+        "description": "Colaborador com atuacao operacional em obra",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "modules": [
+      {
+        "id": "mod-iam",
+        "tenant_id": "tenant-sos-default",
+        "name": "Usuarios e Permissoes",
+        "objective": "Controlar acesso por perfil e grupo de permissoes com verificacao por acao.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-cargos-epi",
+        "tenant_id": "tenant-sos-default",
+        "name": "Cargos e Kits de EPI",
+        "objective": "Definir cargos e os EPIs obrigatorios por funcao dentro da empresa.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-epi",
+        "tenant_id": "tenant-sos-default",
+        "name": "Gestao de EPI",
+        "objective": "Gerenciar entregas, vencimentos, solicitacoes de troca e evidencias de EPI.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-pt",
+        "tenant_id": "tenant-sos-default",
+        "name": "Permissao de Trabalho",
+        "objective": "Controlar autorizacao formal para atividades de risco com checklist e assinaturas.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-risco",
+        "tenant_id": "tenant-sos-default",
+        "name": "Analise de Risco",
+        "objective": "Identificar riscos e formalizar mitigacoes para atividades operacionais.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-relatorios",
+        "tenant_id": "tenant-sos-default",
+        "name": "Relatorios de Obra",
+        "objective": "Registrar apontamentos tecnicos e plano de correcao em campo.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-documentos",
+        "tenant_id": "tenant-sos-default",
+        "name": "Gestao de Documentos",
+        "objective": "Centralizar documentos obrigatorios para respaldo juridico e compliance.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-notificacoes",
+        "tenant_id": "tenant-sos-default",
+        "name": "Notificacoes",
+        "objective": "Notificar usuarios sobre vencimentos, pendencias e acoes obrigatorias.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "mod-auditoria",
+        "tenant_id": "tenant-sos-default",
+        "name": "Auditoria e Rastreabilidade",
+        "objective": "Garantir autoria e trilha historica de eventos criticos do sistema.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "notifications": [],
+    "permission_group_permissions": [
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-user-manage"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-permission-manage"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-epi-deliver"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-epi-exchange-review"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-pt-create"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-pt-approve"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-risk-manage"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-report-create"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-document-manage"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-notification-read"
+      },
+      {
+        "permission_group_id": "pg-admin",
+        "permission_id": "perm-report-read"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-epi-deliver"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-epi-exchange-review"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-pt-create"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-pt-approve"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-risk-manage"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-report-create"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-report-read"
+      },
+      {
+        "permission_group_id": "pg-tecnico",
+        "permission_id": "perm-notification-read"
+      },
+      {
+        "permission_group_id": "pg-colaborador",
+        "permission_id": "perm-epi-exchange-request"
+      },
+      {
+        "permission_group_id": "pg-colaborador",
+        "permission_id": "perm-report-read"
+      },
+      {
+        "permission_group_id": "pg-colaborador",
+        "permission_id": "perm-notification-read"
+      }
+    ],
+    "permission_groups": [
+      {
+        "id": "pg-admin",
+        "tenant_id": "tenant-sos-default",
+        "name": "Administradores",
+        "description": "Acesso administrativo completo",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "pg-tecnico",
+        "tenant_id": "tenant-sos-default",
+        "name": "Tecnicos de Seguranca",
+        "description": "Operacao tecnica de seguranca",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "pg-colaborador",
+        "tenant_id": "tenant-sos-default",
+        "name": "Colaboradores",
+        "description": "Acesso do aplicativo do colaborador",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "permissions": [
+      {
+        "id": "perm-user-manage",
+        "resource": "user",
+        "action": "manage",
+        "description": "Criar, editar e desativar usuarios"
+      },
+      {
+        "id": "perm-permission-manage",
+        "resource": "permission",
+        "action": "manage",
+        "description": "Criar grupos e vincular permissoes"
+      },
+      {
+        "id": "perm-epi-deliver",
+        "resource": "epi_delivery",
+        "action": "create",
+        "description": "Entregar EPI para colaborador"
+      },
+      {
+        "id": "perm-epi-exchange-review",
+        "resource": "epi_exchange",
+        "action": "review",
+        "description": "Aprovar ou rejeitar troca de EPI"
+      },
+      {
+        "id": "perm-pt-create",
+        "resource": "work_permit",
+        "action": "create",
+        "description": "Criar permissao de trabalho"
+      },
+      {
+        "id": "perm-pt-approve",
+        "resource": "work_permit",
+        "action": "approve",
+        "description": "Aprovar permissao de trabalho"
+      },
+      {
+        "id": "perm-risk-manage",
+        "resource": "risk_analysis",
+        "action": "manage",
+        "description": "Gerenciar analises de risco"
+      },
+      {
+        "id": "perm-report-create",
+        "resource": "work_report",
+        "action": "create",
+        "description": "Criar relatorios de obra"
+      },
+      {
+        "id": "perm-document-manage",
+        "resource": "document",
+        "action": "manage",
+        "description": "Gerenciar documentos da empresa"
+      },
+      {
+        "id": "perm-notification-read",
+        "resource": "notification",
+        "action": "read",
+        "description": "Visualizar notificacoes"
+      },
+      {
+        "id": "perm-epi-exchange-request",
+        "resource": "epi_exchange",
+        "action": "create",
+        "description": "Solicitar troca de EPI"
+      },
+      {
+        "id": "perm-report-read",
+        "resource": "work_report",
+        "action": "read",
+        "description": "Visualizar relatorios"
+      }
+    ],
+    "prd_meta": [
+      {
+        "id": 1,
+        "tenant_id": "tenant-sos-default",
+        "product_name": "SOS - Sistema Operacional Seguranca",
+        "version": "1.0.0",
+        "owner": "Forge Technology",
+        "last_updated": "2026-04-03",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "requirement_tags": [
+      {
+        "id": 1,
+        "requirement_id": "req-rf01",
+        "tag": "usuarios"
+      },
+      {
+        "id": 2,
+        "requirement_id": "req-rf01",
+        "tag": "perfil"
+      },
+      {
+        "id": 3,
+        "requirement_id": "req-rf02",
+        "tag": "permissoes"
+      },
+      {
+        "id": 4,
+        "requirement_id": "req-rf02",
+        "tag": "autorizacao"
+      },
+      {
+        "id": 5,
+        "requirement_id": "req-rnf01",
+        "tag": "auditoria"
+      },
+      {
+        "id": 6,
+        "requirement_id": "req-rf03",
+        "tag": "cargos"
+      },
+      {
+        "id": 7,
+        "requirement_id": "req-rf04",
+        "tag": "kit-epi"
+      },
+      {
+        "id": 8,
+        "requirement_id": "req-rnf02",
+        "tag": "rastreabilidade"
+      },
+      {
+        "id": 9,
+        "requirement_id": "req-rf05",
+        "tag": "epi"
+      },
+      {
+        "id": 10,
+        "requirement_id": "req-rf06",
+        "tag": "entrega-epi"
+      },
+      {
+        "id": 11,
+        "requirement_id": "req-rf07",
+        "tag": "troca-epi"
+      },
+      {
+        "id": 12,
+        "requirement_id": "req-rf08",
+        "tag": "notificacao"
+      },
+      {
+        "id": 13,
+        "requirement_id": "req-rnf03",
+        "tag": "compliance"
+      },
+      {
+        "id": 14,
+        "requirement_id": "req-rf09",
+        "tag": "atividade-risco"
+      },
+      {
+        "id": 15,
+        "requirement_id": "req-rf10",
+        "tag": "permissao-trabalho"
+      },
+      {
+        "id": 16,
+        "requirement_id": "req-rf10",
+        "tag": "assinatura"
+      },
+      {
+        "id": 17,
+        "requirement_id": "req-rnf04",
+        "tag": "validade-pt"
+      },
+      {
+        "id": 18,
+        "requirement_id": "req-rf11",
+        "tag": "analise-risco"
+      },
+      {
+        "id": 19,
+        "requirement_id": "req-rnf05",
+        "tag": "qualidade-dados"
+      },
+      {
+        "id": 20,
+        "requirement_id": "req-rf12",
+        "tag": "relatorio-obra"
+      },
+      {
+        "id": 21,
+        "requirement_id": "req-rnf06",
+        "tag": "governanca"
+      },
+      {
+        "id": 22,
+        "requirement_id": "req-rf13",
+        "tag": "documentos"
+      },
+      {
+        "id": 23,
+        "requirement_id": "req-rnf07",
+        "tag": "vencimento-documental"
+      },
+      {
+        "id": 24,
+        "requirement_id": "req-rf14",
+        "tag": "alertas"
+      },
+      {
+        "id": 25,
+        "requirement_id": "req-rf15",
+        "tag": "autoria"
+      },
+      {
+        "id": 26,
+        "requirement_id": "req-rnf08",
+        "tag": "imutabilidade"
+      }
+    ],
+    "requirements": [
+      {
+        "id": "req-rf01",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-iam",
+        "code": "RF01",
+        "title": "Cadastro de usuarios com perfis base",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Cadastrar pessoas no sistema com perfis claros: Administrador, Tecnico de Seguranca e Colaborador.",
+        "need_details": "Sem perfis bem definidos, qualquer pessoa pode ver ou alterar dados que nao deveria.",
+        "system_behavior": "Ao criar o usuario, o sistema salva perfil, empresa, status e historico de alteracoes.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf02",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-iam",
+        "code": "RF02",
+        "title": "Grupos de permissao por acao",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Criar grupos de permissao para controlar quem pode fazer cada acao.",
+        "need_details": "A empresa precisa ajustar acessos por area sem depender de desenvolvimento.",
+        "system_behavior": "Toda acao critica verifica permissao e bloqueia quando o usuario nao tiver acesso.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf01",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-iam",
+        "code": "RNF01",
+        "title": "Auditoria de autorizacao",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Toda permissao aceita ou negada deve ficar registrada para auditoria.",
+        "need_details": "Em fiscalizacao ou processo, a empresa precisa provar quem fez o que e quando.",
+        "system_behavior": "O log guarda usuario, acao, alvo, resultado e data sem apagar historico.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf03",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-cargos-epi",
+        "code": "RF03",
+        "title": "Cadastro de cargos",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Cadastrar cargos da empresa com descricao simples.",
+        "need_details": "Cada cargo define responsabilidades e regras de seguranca diferentes.",
+        "system_behavior": "O sistema permite ativar, editar e acompanhar historico dos cargos.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf04",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-cargos-epi",
+        "code": "RF04",
+        "title": "Vinculo de kit de EPI por cargo",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Definir quais EPIs sao obrigatorios para cada cargo.",
+        "need_details": "Quem trabalha em risco diferente precisa de kit diferente.",
+        "system_behavior": "Para cada item do kit, o sistema salva quantidade, obrigatoriedade e validade padrao.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf02",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-cargos-epi",
+        "code": "RNF02",
+        "title": "Versionamento de kits por cargo",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Quando o kit mudar, o historico antigo deve continuar salvo.",
+        "need_details": "A empresa precisa mostrar qual regra valia em cada periodo.",
+        "system_behavior": "Cada mudanca de kit registra versao, autor e data.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf05",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-epi",
+        "code": "RF05",
+        "title": "Cadastro base de EPI",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Manter lista unica de EPIs com codigo e categoria.",
+        "need_details": "Sem padrao, cada equipe cadastra nomes diferentes para o mesmo EPI.",
+        "system_behavior": "Essa lista sera usada em cargos, entregas e trocas.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf06",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-epi",
+        "code": "RF06",
+        "title": "Entrega de EPI com evidencia",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Registrar entrega de EPI com assinatura e foto como comprovante.",
+        "need_details": "Em caso de acidente, a empresa precisa provar que entregou o EPI correto.",
+        "system_behavior": "A entrega so pode ser feita por quem tem permissao e deve salvar data, quantidade e evidencias.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf07",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-epi",
+        "code": "RF07",
+        "title": "Solicitacao de troca de EPI pelo colaborador",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Permitir que colaborador peca troca de EPI pelo app.",
+        "need_details": "EPI pode quebrar antes do prazo e a troca precisa ser rapida.",
+        "system_behavior": "A solicitacao guarda motivo, foto e passa por aprovacao tecnica.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf08",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-epi",
+        "code": "RF08",
+        "title": "Notificacao de vencimento de EPI",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Avisar quando o EPI estiver perto de vencer.",
+        "need_details": "Troca preventiva evita acidente e multa por item vencido.",
+        "system_behavior": "O sistema dispara alerta automatico com antecedencia configuravel.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf03",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-epi",
+        "code": "RNF03",
+        "title": "Retencao de evidencias de EPI",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Comprovantes de EPI devem ficar guardados com seguranca por longo prazo.",
+        "need_details": "Auditorias e processos podem pedir esses dados anos depois.",
+        "system_behavior": "O sistema salva metadados e links dos arquivos com controle de integridade.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf09",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-pt",
+        "code": "RF09",
+        "title": "Cadastro de atividades de risco",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Cadastrar tipos de atividade de risco da empresa.",
+        "need_details": "A PT precisa saber exatamente qual atividade sera executada.",
+        "system_behavior": "Cada atividade tem codigo, descricao e norma de seguranca associada.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf10",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-pt",
+        "code": "RF10",
+        "title": "Emissao de PT com checklist e dupla assinatura",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Emitir permissao de trabalho com checklist e assinaturas.",
+        "need_details": "Sem PT formal, atividades criticas aumentam risco operacional e juridico.",
+        "system_behavior": "A aprovacao da PT exige checklist completo, assinatura do tecnico e do colaborador.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf04",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-pt",
+        "code": "RNF04",
+        "title": "Controle de validade de PT",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Toda PT deve ter prazo de validade.",
+        "need_details": "PT vencida nao pode continuar autorizando atividade de risco.",
+        "system_behavior": "Ao vencer, o sistema bloqueia uso e envia aviso de renovacao.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf11",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-risco",
+        "code": "RF11",
+        "title": "Registro de analise de risco",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Registrar riscos de cada atividade com plano de acao.",
+        "need_details": "Identificar risco antes da execucao reduz acidentes.",
+        "system_behavior": "A analise guarda severidade, responsavel, status e historico.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf05",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-risco",
+        "code": "RNF05",
+        "title": "Padronizacao de classificacao de risco",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Classificacao de risco deve seguir um padrao unico.",
+        "need_details": "Sem padrao, comparacao entre obras fica confusa.",
+        "system_behavior": "O sistema aceita apenas niveis definidos e valida campos obrigatorios.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf12",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-relatorios",
+        "code": "RF12",
+        "title": "Relatorio de obra por tecnico de seguranca",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Permitir relatorio de obra apenas por tecnico autorizado.",
+        "need_details": "Relatorio tecnico precisa ter autoria correta para ter validade.",
+        "system_behavior": "O sistema valida permissao e registra apontamentos, fotos e plano de correcao.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf06",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-relatorios",
+        "code": "RNF06",
+        "title": "Rastreabilidade de apontamentos",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Todo apontamento precisa mostrar quem criou, quando e qual status.",
+        "need_details": "Sem rastreabilidade, nao da para provar tratamento das nao conformidades.",
+        "system_behavior": "Cada alteracao fica no historico ate o encerramento do caso.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf13",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-documentos",
+        "code": "RF13",
+        "title": "Gestao centralizada de documentos",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Centralizar documentos obrigatorios da empresa e colaboradores.",
+        "need_details": "Documento espalhado em planilhas gera perda de prazo e retrabalho.",
+        "system_behavior": "Cada documento tem categoria, validade, responsavel e link do arquivo.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf07",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-documentos",
+        "code": "RNF07",
+        "title": "Politica de expiracao documental",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Documento vencido deve aparecer como pendencia automaticamente.",
+        "need_details": "Documento invalido pode gerar multa e embargo da operacao.",
+        "system_behavior": "O sistema muda status para expirado e avisa responsaveis antes do prazo.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf14",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-notificacoes",
+        "code": "RF14",
+        "title": "Central de notificacoes por pendencia",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Ter uma central unica de alertas do sistema.",
+        "need_details": "Sem alerta centralizado, pendencias importantes passam despercebidas.",
+        "system_behavior": "Cada aviso mostra usuario, origem, data e status de leitura.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rf15",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-auditoria",
+        "code": "RF15",
+        "title": "Autoria obrigatoria de registros",
+        "type": "RF",
+        "status": "BACKLOG",
+        "summary": "Todo registro importante deve ter autor identificado.",
+        "need_details": "Sem autoria, o dado perde valor para auditoria e defesa juridica.",
+        "system_behavior": "O sistema bloqueia salvamento de registro critico sem created_by_user_id.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "req-rnf08",
+        "tenant_id": "tenant-sos-default",
+        "module_id": "mod-auditoria",
+        "code": "RNF08",
+        "title": "Imutabilidade logica de eventos de auditoria",
+        "type": "RNF",
+        "status": "BACKLOG",
+        "summary": "Eventos de auditoria nao podem ser editados por usuarios comuns.",
+        "need_details": "Para ter valor juridico, o historico precisa ser confiavel.",
+        "system_behavior": "A tabela de auditoria aceita apenas novos eventos e restringe manutencoes especiais.",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "risk_analyses": [],
+    "tenants": [
+      {
+        "id": "tenant-sos-default",
+        "name": "Empresa Demo SOS",
+        "legal_name": "Empresa Demo SOS LTDA",
+        "created_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "user_permission_groups": [
+      {
+        "user_id": "user-admin-001",
+        "permission_group_id": "pg-admin",
+        "assigned_by_user_id": "user-admin-001",
+        "assigned_at": "2026-04-04 02:26:15"
+      },
+      {
+        "user_id": "user-tecnico-001",
+        "permission_group_id": "pg-tecnico",
+        "assigned_by_user_id": "user-admin-001",
+        "assigned_at": "2026-04-04 02:26:15"
+      },
+      {
+        "user_id": "user-colab-001",
+        "permission_group_id": "pg-colaborador",
+        "assigned_by_user_id": "user-admin-001",
+        "assigned_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "users": [
+      {
+        "id": "user-admin-001",
+        "tenant_id": "tenant-sos-default",
+        "full_name": "Administrador Master",
+        "email": "admin@sos.local",
+        "profile_type": "ADMINISTRADOR",
+        "is_active": 1,
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "user-tecnico-001",
+        "tenant_id": "tenant-sos-default",
+        "full_name": "Tecnico de Seguranca",
+        "email": "tecnico@sos.local",
+        "profile_type": "TECNICO_SEGURANCA",
+        "is_active": 1,
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "user-colab-001",
+        "tenant_id": "tenant-sos-default",
+        "full_name": "Colaborador Demo",
+        "email": "colaborador@sos.local",
+        "profile_type": "COLABORADOR",
+        "is_active": 1,
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "work_activities": [
+      {
+        "id": "act-altura",
+        "tenant_id": "tenant-sos-default",
+        "code": "ATV001",
+        "name": "Trabalho em Altura",
+        "description": "Atividade executada acima de 2 metros com risco de queda",
+        "safety_standard_reference": "NR-35",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "act-espaco-confinado",
+        "tenant_id": "tenant-sos-default",
+        "code": "ATV002",
+        "name": "Espaco Confinado",
+        "description": "Atividade em ambiente com ventilacao limitada",
+        "safety_standard_reference": "NR-33",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      },
+      {
+        "id": "act-eletricidade",
+        "tenant_id": "tenant-sos-default",
+        "code": "ATV003",
+        "name": "Atividade com Eletricidade",
+        "description": "Atividade com contato direto ou indireto com instalacoes eletricas",
+        "safety_standard_reference": "NR-10",
+        "created_by_user_id": "user-admin-001",
+        "created_at": "2026-04-04 02:26:15",
+        "updated_at": "2026-04-04 02:26:15"
+      }
+    ],
+    "work_permit_activities": [],
+    "work_permit_attachments": [],
+    "work_permit_checklist_items": [],
+    "work_permits": [],
+    "work_report_attachments": [],
+    "work_report_findings": [],
+    "work_reports": []
+  }
+}
