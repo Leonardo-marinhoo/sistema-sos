@@ -114,6 +114,16 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                 />
               </div>
             )}
+            <div className="space-y-2">
+              <Label htmlFor="photo_url">Foto (URL opcional)</Label>
+              <Input
+                id="photo_url"
+                name="photo_url"
+                type="url"
+                defaultValue={user.photo_url ?? ""}
+                placeholder="https://exemplo.com/foto.jpg"
+              />
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="role">Perfil</Label>

@@ -1,17 +1,31 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { FormWithToast } from "@/components/ui/form-with-toast";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { SignaturePad } from "@/components/ui/signature-pad";
+import {
+  getAvatarSrc,
+  getRoleAvatarFallback,
+  getUserInitials,
+} from "@/lib/avatar";
 
 type EmployeeOption = {
   id: string;
   fullName: string;
+  role: string;
+  photoUrl?: string | null;
   companyName: string | null;
   jobId: string | null;
   jobName: string | null;
@@ -69,7 +83,7 @@ export function DeliveryCreateForm({
 
   const selectedEmployee = useMemo(
     () => employees.find((employee) => employee.id === employeeId) ?? null,
-    [employeeId, employees]
+    [employeeId, employees],
   );
 
   const reminderKit = useMemo(() => {
@@ -88,9 +102,15 @@ export function DeliveryCreateForm({
     });
   };
 
-  const updateRow = (key: string, field: keyof Omit<DeliveryRow, "key">, value: string) => {
+  const updateRow = (
+    key: string,
+    field: keyof Omit<DeliveryRow, "key">,
+    value: string,
+  ) => {
     setRows((current) =>
-      current.map((row) => (row.key === key ? { ...row, [field]: value } : row))
+      current.map((row) =>
+        row.key === key ? { ...row, [field]: value } : row,
+      ),
     );
   };
 
@@ -104,9 +124,37 @@ export function DeliveryCreateForm({
       <Card>
         <CardHeader>
           <CardTitle>Colaborador</CardTitle>
-          <CardDescription>Selecione quem recebera os EPIs nesta entrega.</CardDescription>
+          <CardDescription>
+            Selecione quem recebera os EPIs nesta entrega.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
+          {selectedEmployee && (
+            <div className="flex items-center gap-3 rounded-md border border-border/80 bg-muted/20 p-3">
+              <UserAvatar
+                className="h-9 w-9 border border-border/70"
+                src={getAvatarSrc(
+                  selectedEmployee.photoUrl,
+                  selectedEmployee.role,
+                )}
+                fallbackSrc={getRoleAvatarFallback(selectedEmployee.role)}
+                alt={selectedEmployee.fullName}
+                initials={getUserInitials(selectedEmployee.fullName)}
+                fallbackClassName="text-xs font-semibold"
+              />
+              <div>
+                <p className="text-sm font-medium">
+                  {selectedEmployee.fullName}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {selectedEmployee.jobName
+                    ? selectedEmployee.jobName
+                    : "Sem cargo"}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="employee_user_id">Colaborador</Label>
             <select
@@ -121,7 +169,9 @@ export function DeliveryCreateForm({
                 <option key={employee.id} value={employee.id}>
                   {employee.fullName}
                   {employee.jobName ? ` - ${employee.jobName}` : " - Sem cargo"}
-                  {showEmployeeCompany && employee.companyName ? ` (${employee.companyName})` : ""}
+                  {showEmployeeCompany && employee.companyName
+                    ? ` (${employee.companyName})`
+                    : ""}
                 </option>
               ))}
             </select>
@@ -133,14 +183,19 @@ export function DeliveryCreateForm({
         <CardHeader>
           <CardTitle>Lembrete de Kit Base do Cargo</CardTitle>
           <CardDescription>
-            Lista apenas para consulta. Voce pode registrar entrega parcial livremente.
+            Lista apenas para consulta. Voce pode registrar entrega parcial
+            livremente.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {!selectedEmployee?.jobId ? (
-            <p className="text-sm text-muted-foreground">Este colaborador nao possui cargo vinculado.</p>
+            <p className="text-sm text-muted-foreground">
+              Este colaborador nao possui cargo vinculado.
+            </p>
           ) : reminderKit.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Nao ha EPIs base vinculados a este cargo ainda.</p>
+            <p className="text-sm text-muted-foreground">
+              Nao ha EPIs base vinculados a este cargo ainda.
+            </p>
           ) : (
             <div className="space-y-2">
               {reminderKit.map((item) => (
@@ -149,9 +204,12 @@ export function DeliveryCreateForm({
                   className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border/80 bg-muted/30 p-3 text-sm"
                 >
                   <div>
-                    <p className="font-medium">{item.epiCode} - {item.epiName}</p>
+                    <p className="font-medium">
+                      {item.epiCode} - {item.epiName}
+                    </p>
                     <p className="text-muted-foreground">
-                      Quantidade base: {item.quantity} | {item.isMandatory ? "Obrigatorio" : "Opcional"}
+                      Quantidade base: {item.quantity} |{" "}
+                      {item.isMandatory ? "Obrigatorio" : "Opcional"}
                     </p>
                   </div>
                 </div>
@@ -164,17 +222,24 @@ export function DeliveryCreateForm({
       <Card>
         <CardHeader>
           <CardTitle>Itens Entregues</CardTitle>
-          <CardDescription>Informe somente os EPIs efetivamente entregues nesta operacao.</CardDescription>
+          <CardDescription>
+            Informe somente os EPIs efetivamente entregues nesta operacao.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {rows.map((row, index) => (
-            <div key={row.key} className="grid gap-3 rounded-md border border-border/80 p-3 md:grid-cols-12">
+            <div
+              key={row.key}
+              className="grid gap-3 rounded-md border border-border/80 p-3 md:grid-cols-12"
+            >
               <div className="space-y-2 md:col-span-6">
                 <Label>EPI</Label>
                 <select
                   name="epi_ids"
                   value={row.epiId}
-                  onChange={(event) => updateRow(row.key, "epiId", event.target.value)}
+                  onChange={(event) =>
+                    updateRow(row.key, "epiId", event.target.value)
+                  }
                   className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
                   required={index === 0}
                 >
@@ -194,7 +259,9 @@ export function DeliveryCreateForm({
                   type="number"
                   min={1}
                   value={row.quantity}
-                  onChange={(event) => updateRow(row.key, "quantity", event.target.value)}
+                  onChange={(event) =>
+                    updateRow(row.key, "quantity", event.target.value)
+                  }
                   required={index === 0}
                 />
               </div>
@@ -205,13 +272,20 @@ export function DeliveryCreateForm({
                   name="expires_ats"
                   type="date"
                   value={row.expiresAt}
-                  onChange={(event) => updateRow(row.key, "expiresAt", event.target.value)}
+                  onChange={(event) =>
+                    updateRow(row.key, "expiresAt", event.target.value)
+                  }
                   required={index === 0}
                 />
               </div>
 
               <div className="flex items-end md:col-span-1">
-                <Button type="button" variant="ghost" onClick={() => removeRow(row.key)} className="w-full">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => removeRow(row.key)}
+                  className="w-full"
+                >
                   Remover
                 </Button>
               </div>
@@ -228,7 +302,8 @@ export function DeliveryCreateForm({
         <CardHeader>
           <CardTitle>Assinaturas obrigatorias</CardTitle>
           <CardDescription>
-            Colete a assinatura do colaborador e do entregador para concluir o registro.
+            Colete a assinatura do colaborador e do responsável pela troca para
+            concluir o registro.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -240,15 +315,23 @@ export function DeliveryCreateForm({
               required
             />
             <SignaturePad
-              label="Assinatura do entregador"
+              label="Assinatura do responsável pela troca"
               value={delivererSignature}
               onChange={setDelivererSignature}
               required
             />
           </div>
 
-          <input type="hidden" name="receiver_signature_data_url" value={receiverSignature} />
-          <input type="hidden" name="deliverer_signature_data_url" value={delivererSignature} />
+          <input
+            type="hidden"
+            name="receiver_signature_data_url"
+            value={receiverSignature}
+          />
+          <input
+            type="hidden"
+            name="deliverer_signature_data_url"
+            value={delivererSignature}
+          />
 
           {(!receiverSignature || !delivererSignature) && (
             <p className="text-sm text-amber-700">

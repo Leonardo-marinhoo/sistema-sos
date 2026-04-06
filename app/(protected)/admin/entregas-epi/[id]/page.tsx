@@ -1,12 +1,13 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { requirePermission } from "@/lib/auth/session";
+import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar";
 
 export default async function EpiDeliveryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,8 +28,8 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
   if (!delivery) notFound();
 
   const [{ data: employee }, { data: deliverer }, { data: items }, { data: company }] = await Promise.all([
-    supabase.from("app_users").select("id,full_name").eq("id", delivery.employee_user_id).maybeSingle(),
-    supabase.from("app_users").select("id,full_name").eq("id", delivery.delivered_by_user_id).maybeSingle(),
+    supabase.from("app_users").select("id,full_name,role,photo_url").eq("id", delivery.employee_user_id).maybeSingle(),
+    supabase.from("app_users").select("id,full_name,role,photo_url").eq("id", delivery.delivered_by_user_id).maybeSingle(),
     supabase
       .from("epi_delivery_items")
       .select("id,epi_id,quantity,expires_at,epis(code,name)")
@@ -62,16 +63,39 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
             <CardTitle>Resumo</CardTitle>
             <CardDescription>Informacoes principais da entrega registrada.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between gap-3 text-sm">
-              <span className="text-muted-foreground">Colaborador</span>
-              <span className="font-medium text-right">{employee?.full_name ?? "-"}</span>
+          <CardContent className="space-y-5">
+            <div className="flex items-center gap-4 rounded-lg border bg-muted/30 p-4">
+              <UserAvatar
+                className="h-14 w-14 border border-border/50 shadow-sm"
+                variant="square"
+                src={getAvatarSrc(employee?.photo_url, employee?.role)}
+                fallbackSrc={getRoleAvatarFallback(employee?.role)}
+                alt={employee?.full_name ?? "Colaborador"}
+                initials={getUserInitials(employee?.full_name ?? "ND")}
+                fallbackClassName="text-lg font-bold"
+              />
+              <div>
+                <p className="text-xs text-muted-foreground">Colaborador</p>
+                <p className="font-semibold">{employee?.full_name ?? "-"}</p>
+              </div>
             </div>
-            <Separator />
-            <div className="flex items-center justify-between gap-3 text-sm">
-              <span className="text-muted-foreground">Entregador</span>
-              <span className="font-medium text-right">{deliverer?.full_name ?? "-"}</span>
+
+            <div className="flex items-center gap-4 rounded-lg border bg-muted/30 p-4">
+              <UserAvatar
+                className="h-14 w-14 border border-border/50 shadow-sm"
+                variant="square"
+                src={getAvatarSrc(deliverer?.photo_url, deliverer?.role)}
+                fallbackSrc={getRoleAvatarFallback(deliverer?.role)}
+                alt={deliverer?.full_name ?? "Entregador"}
+                initials={getUserInitials(deliverer?.full_name ?? "ND")}
+                fallbackClassName="text-lg font-bold"
+              />
+              <div>
+                <p className="text-xs text-muted-foreground">Responsável pela troca</p>
+                <p className="font-semibold">{deliverer?.full_name ?? "-"}</p>
+              </div>
             </div>
+
             <Separator />
             <div className="flex items-center justify-between gap-3 text-sm">
               <span className="text-muted-foreground">Data da entrega</span>
@@ -107,12 +131,10 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
             <div className="space-y-2">
               <p className="text-sm font-medium">Colaborador</p>
               {delivery.receiver_signature_data_url ? (
-                <Image
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
                   src={delivery.receiver_signature_data_url}
                   alt="Assinatura do colaborador"
-                  width={720}
-                  height={220}
-                  unoptimized
                   className="h-40 w-full rounded-md border border-border/80 bg-emerald-50/60 object-contain p-2"
                 />
               ) : (
@@ -125,17 +147,15 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
             <div className="space-y-2">
               <p className="text-sm font-medium">Entregador</p>
               {delivery.deliverer_signature_data_url ? (
-                <Image
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
                   src={delivery.deliverer_signature_data_url}
                   alt="Assinatura do entregador"
-                  width={720}
-                  height={220}
-                  unoptimized
                   className="h-40 w-full rounded-md border border-border/80 bg-emerald-50/60 object-contain p-2"
                 />
               ) : (
                 <p className="rounded-md border border-dashed border-border p-3 text-sm text-muted-foreground">
-                  Assinatura do entregador nao encontrada.
+                  Assinatura do responsável pela troca nao encontrada.
                 </p>
               )}
             </div>

@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireSession } from "@/lib/auth/session";
+import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar";
 import { syncExpiredWorkPermits } from "@/app/(protected)/admin/permissoes-trabalho/actions";
 
 function getStatusVariant(status: string, isExpiredByDate: boolean) {
@@ -60,15 +62,15 @@ export default async function AdminWorkPermitsPage() {
       ? supabase.from("work_activities").select("id,code,title").in("id", activityIds)
       : Promise.resolve({ data: [] as Array<{ id: string; code: string; title: string }> }),
     userIds.length
-      ? supabase.from("app_users").select("id,full_name").in("id", userIds)
-      : Promise.resolve({ data: [] as Array<{ id: string; full_name: string }> }),
+      ? supabase.from("app_users").select("id,full_name,role,photo_url").in("id", userIds)
+      : Promise.resolve({ data: [] as Array<{ id: string; full_name: string; role: string; photo_url: string | null }> }),
     profile.is_superadmin && companyIds.length
       ? supabase.from("companies").select("id,name").in("id", companyIds)
       : Promise.resolve({ data: [] as Array<{ id: string; name: string }> }),
   ]);
 
   const activityMap = new Map((activitiesData ?? []).map((item) => [item.id, item]));
-  const userMap = new Map((usersData ?? []).map((item) => [item.id, item.full_name]));
+  const userMap = new Map((usersData ?? []).map((item) => [item.id, item]));
   const companyMap = new Map((companiesData ?? []).map((item) => [item.id, item.name]));
 
   const nowIso = new Date().toISOString();
@@ -119,10 +121,10 @@ export default async function AdminWorkPermitsPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {permits.map((permit) => {
             const activity = activityMap.get(permit.activity_id);
-            const requesterName = userMap.get(permit.requested_by_user_id) ?? "Nao identificado";
-            const approverName = permit.approved_by_user_id
-              ? userMap.get(permit.approved_by_user_id) ?? "Nao identificado"
-              : "Pendente";
+            const requester = userMap.get(permit.requested_by_user_id) ?? null;
+            const approver = permit.approved_by_user_id
+              ? userMap.get(permit.approved_by_user_id) ?? null
+              : null;
             const isExpiredByDate = permit.expires_at < nowIso;
 
             return (
@@ -133,8 +135,18 @@ export default async function AdminWorkPermitsPage() {
                       <CardTitle className="text-xl">
                         {activity?.code ?? "ATV"} - {activity?.title ?? "Atividade"}
                       </CardTitle>
-                      <CardDescription className="mt-1">
-                        Solicitante: {requesterName}
+                      <CardDescription className="mt-2">
+                        <span className="inline-flex items-center gap-2">
+                          <UserAvatar
+                            className="h-6 w-6 border border-border/70"
+                            src={getAvatarSrc(requester?.photo_url, requester?.role)}
+                            fallbackSrc={getRoleAvatarFallback(requester?.role)}
+                            alt={requester?.full_name ?? "Solicitante"}
+                            initials={getUserInitials(requester?.full_name ?? "ND")}
+                            fallbackClassName="text-[10px] font-semibold"
+                          />
+                          Solicitante: {requester?.full_name ?? "Nao identificado"}
+                        </span>
                       </CardDescription>
                     </div>
                     <Badge variant={getStatusVariant(permit.status, isExpiredByDate)}>
@@ -153,7 +165,22 @@ export default async function AdminWorkPermitsPage() {
                       {new Date(permit.expires_at).toLocaleString("pt-BR")}
                     </p>
                     <p className="sm:col-span-2">
-                      <span className="text-muted-foreground">Aprovador:</span> {approverName}
+                      <span className="text-muted-foreground">Aprovador:</span>{" "}
+                      {approver ? (
+                        <span className="inline-flex items-center gap-2">
+                            <UserAvatar
+                              className="h-6 w-6 border border-border/70"
+                              src={getAvatarSrc(approver.photo_url, approver.role)}
+                              fallbackSrc={getRoleAvatarFallback(approver.role)}
+                              alt={approver.full_name}
+                              initials={getUserInitials(approver.full_name)}
+                              fallbackClassName="text-[10px] font-semibold"
+                            />
+                          {approver.full_name}
+                        </span>
+                      ) : (
+                        "Pendente"
+                      )}
                     </p>
                     {profile.is_superadmin && (
                       <p className="sm:col-span-2">

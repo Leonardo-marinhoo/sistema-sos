@@ -62,6 +62,18 @@ async function assertPermitScope(
   return permit;
 }
 
+const SIGNATURE_DATA_URL_REGEX = /^data:image\/png;base64,[A-Za-z0-9+/=]+$/;
+
+function validateSignatureDataUrl(value: string, fieldName: string) {
+  if (!SIGNATURE_DATA_URL_REGEX.test(value)) {
+    throw new Error(`${fieldName} invalida. Refaca a assinatura no campo indicado`);
+  }
+
+  if (value.length > 1_500_000) {
+    throw new Error(`${fieldName} excede o limite permitido`);
+  }
+}
+
 export async function createWorkPermit(formData: FormData) {
   const { supabase, profile } = await requirePermission("pt-create");
 
@@ -184,10 +196,8 @@ export async function updatePermitChecklist(formData: FormData) {
 
 const approveSchema = z.object({
   permit_id: z.string().uuid(),
-  employee_signature_url: z.string().url("Assinatura do colaborador invalida"),
-  technician_signature_url: z.string().url("Assinatura do tecnico invalida"),
-  employee_photo_url: z.string().url("Foto do colaborador invalida"),
-  technician_photo_url: z.string().url("Foto do tecnico invalida"),
+  employee_signature_data_url: z.string().min(1, "Assinatura do colaborador e obrigatoria"),
+  technician_signature_data_url: z.string().min(1, "Assinatura do tecnico e obrigatoria"),
 });
 
 export async function approveWorkPermit(formData: FormData) {
@@ -195,15 +205,18 @@ export async function approveWorkPermit(formData: FormData) {
 
   const payload = approveSchema.safeParse({
     permit_id: formData.get("permit_id"),
-    employee_signature_url: formData.get("employee_signature_url"),
-    technician_signature_url: formData.get("technician_signature_url"),
-    employee_photo_url: formData.get("employee_photo_url"),
-    technician_photo_url: formData.get("technician_photo_url"),
+    employee_signature_data_url:
+      formData.get("employee_signature_data_url")?.toString().trim() ?? "",
+    technician_signature_data_url:
+      formData.get("technician_signature_data_url")?.toString().trim() ?? "",
   });
 
   if (!payload.success) {
     throw new Error(payload.error.issues[0]?.message ?? "Dados invalidos para aprovacao");
   }
+
+  validateSignatureDataUrl(payload.data.employee_signature_data_url, "Assinatura do colaborador");
+  validateSignatureDataUrl(payload.data.technician_signature_data_url, "Assinatura do tecnico");
 
   const permit = await assertPermitScope(
     supabase,
@@ -235,10 +248,8 @@ export async function approveWorkPermit(formData: FormData) {
     .update({
       status: "active",
       approved_by_user_id: profile.id,
-      employee_signature_url: payload.data.employee_signature_url,
-      technician_signature_url: payload.data.technician_signature_url,
-      employee_photo_url: payload.data.employee_photo_url,
-      technician_photo_url: payload.data.technician_photo_url,
+      employee_signature_data_url: payload.data.employee_signature_data_url,
+      technician_signature_data_url: payload.data.technician_signature_data_url,
     })
     .eq("id", payload.data.permit_id);
 

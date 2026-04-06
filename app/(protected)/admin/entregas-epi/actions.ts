@@ -7,7 +7,7 @@ import { requirePermission } from "@/lib/auth/session";
 const createDeliverySchema = z.object({
   employee_user_id: z.string().uuid(),
   receiver_signature_data_url: z.string().min(1, "Assinatura do colaborador e obrigatoria"),
-  deliverer_signature_data_url: z.string().min(1, "Assinatura do entregador e obrigatoria"),
+  deliverer_signature_data_url: z.string().min(1, "Assinatura do Responsável e obrigatoria"),
 });
 
 const SIGNATURE_DATA_URL_REGEX = /^data:image\/png;base64,[A-Za-z0-9+/=]+$/;

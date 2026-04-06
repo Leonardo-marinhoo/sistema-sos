@@ -5,14 +5,17 @@ import Link from "next/link"
 import { Eye, Pencil } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
+import { UserAvatar } from "@/components/ui/user-avatar"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DataTableRowActions, DataTableRowAction } from "@/components/ui/data-table-row-actions"
+import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar"
 
 export type User = {
   id: string
   full_name: string
   email: string
   role: string
+  photo_url?: string | null
   is_active: boolean
   company_name?: string | null
   job_name: string | null
@@ -25,9 +28,22 @@ export const columnsWithoutCompany: ColumnDef<User>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nome" />
     ),
-    cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("full_name")}</div>
-    ),
+    cell: ({ row }) => {
+      const user = row.original
+      return (
+        <div className="flex items-center gap-2">
+          <UserAvatar
+            className="h-8 w-8"
+            src={getAvatarSrc(user.photo_url, user.role)}
+            fallbackSrc={getRoleAvatarFallback(user.role)}
+            alt={user.full_name}
+            initials={getUserInitials(user.full_name)}
+            fallbackClassName="text-xs font-semibold"
+          />
+          <div className="font-medium">{user.full_name}</div>
+        </div>
+      )
+    },
   },
   {
     accessorKey: "email",

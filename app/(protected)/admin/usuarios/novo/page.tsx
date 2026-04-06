@@ -108,6 +108,15 @@ export default async function NewUserPage() {
               />
               <p className="text-xs text-muted-foreground">Mínimo de 6 caracteres</p>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="photo_url">Foto (URL opcional)</Label>
+              <Input
+                id="photo_url"
+                type="url"
+                name="photo_url"
+                placeholder="https://exemplo.com/foto.jpg"
+              />
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="role">Perfil</Label>

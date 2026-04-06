@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { requirePermission } from "@/lib/auth/session";
+import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar";
 
 export default async function EpiDeliveriesPage() {
   const { supabase, profile } = await requirePermission("epi-deliver");
@@ -32,8 +34,8 @@ export default async function EpiDeliveriesPage() {
 
   const [{ data: usersData }, { data: itemsData }, { data: companiesData }] = await Promise.all([
     userIds.length
-      ? supabase.from("app_users").select("id,full_name").in("id", userIds)
-      : Promise.resolve({ data: [] as Array<{ id: string; full_name: string }> }),
+      ? supabase.from("app_users").select("id,full_name,role,photo_url").in("id", userIds)
+      : Promise.resolve({ data: [] as Array<{ id: string; full_name: string; role: string; photo_url: string | null }> }),
     deliveryIds.length
       ? supabase.from("epi_delivery_items").select("delivery_id,quantity").in("delivery_id", deliveryIds)
       : Promise.resolve({ data: [] as Array<{ delivery_id: string; quantity: number }> }),
@@ -42,7 +44,7 @@ export default async function EpiDeliveriesPage() {
       : Promise.resolve({ data: [] as Array<{ id: string; name: string }> }),
   ]);
 
-  const userMap = new Map((usersData ?? []).map((user) => [user.id, user.full_name]));
+  const userMap = new Map((usersData ?? []).map((user) => [user.id, user]));
   const companyMap = new Map((companiesData ?? []).map((company) => [company.id, company.name]));
 
   const itemCountMap = new Map<string, { itemCount: number; totalQuantity: number }>();
@@ -86,6 +88,8 @@ export default async function EpiDeliveriesPage() {
         <div className="grid gap-4 lg:grid-cols-2">
           {deliveries.map((delivery) => {
             const itemStats = itemCountMap.get(delivery.id) ?? { itemCount: 0, totalQuantity: 0 };
+            const employee = userMap.get(delivery.employee_user_id) ?? null;
+            const deliverer = userMap.get(delivery.delivered_by_user_id) ?? null;
             return (
               <Card key={delivery.id}>
                 <CardHeader>
@@ -93,7 +97,17 @@ export default async function EpiDeliveriesPage() {
                     <div>
                       <CardTitle className="text-xl">Entrega #{delivery.id.slice(0, 8)}</CardTitle>
                       <CardDescription className="mt-1">
-                        Colaborador: {userMap.get(delivery.employee_user_id) ?? "Nao identificado"}
+                        <span className="inline-flex items-center gap-2">
+                          <UserAvatar
+                            className="h-6 w-6 border border-border/70"
+                            src={getAvatarSrc(employee?.photo_url, employee?.role)}
+                            fallbackSrc={getRoleAvatarFallback(employee?.role)}
+                            alt={employee?.full_name ?? "Colaborador"}
+                            initials={getUserInitials(employee?.full_name ?? "ND")}
+                            fallbackClassName="text-[10px] font-semibold"
+                          />
+                          Colaborador: {employee?.full_name ?? "Nao identificado"}
+                        </span>
                       </CardDescription>
                     </div>
                     <Badge variant="outline">{itemStats.itemCount} itens</Badge>
@@ -102,7 +116,21 @@ export default async function EpiDeliveriesPage() {
                 <CardContent className="space-y-3 text-sm">
                   <p>
                     <span className="text-muted-foreground">Entregador:</span>{" "}
-                    {userMap.get(delivery.delivered_by_user_id) ?? "Nao identificado"}
+                    {deliverer ? (
+                      <span className="inline-flex items-center gap-2">
+                        <UserAvatar
+                          className="h-6 w-6 border border-border/70"
+                          src={getAvatarSrc(deliverer.photo_url, deliverer.role)}
+                          fallbackSrc={getRoleAvatarFallback(deliverer.role)}
+                          alt={deliverer.full_name}
+                          initials={getUserInitials(deliverer.full_name)}
+                          fallbackClassName="text-[10px] font-semibold"
+                        />
+                        {deliverer.full_name}
+                      </span>
+                    ) : (
+                      "Nao identificado"
+                    )}
                   </p>
                   <p>
                     <span className="text-muted-foreground">Quantidade total:</span> {itemStats.totalQuantity}

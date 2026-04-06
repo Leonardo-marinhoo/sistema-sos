@@ -3,12 +3,14 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { FormWithToast } from "@/components/ui/form-with-toast";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { deleteUser } from "@/app/(protected)/admin/usuarios/actions";
 import { requirePermission, requireSession } from "@/lib/auth/session";
+import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar";
 import { APP_USER_DETAIL_WITH_COMPANY_AND_JOB_SELECT } from "@/lib/supabase/selects";
 
 export default async function UserViewPage({ params }: { params: Promise<{ id: string }> }) {
@@ -42,18 +44,33 @@ export default async function UserViewPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start gap-4">
+          <Button variant="ghost" size="icon" asChild className="mt-1">
             <Link href="/admin/usuarios">
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <div className="space-y-1">
+          <UserAvatar
+            className="h-20 w-20 border-2 border-border/50 shadow-sm"
+            variant="square"
+            src={getAvatarSrc(user.photo_url, user.role)}
+            fallbackSrc={getRoleAvatarFallback(user.role)}
+            alt={user.full_name}
+            initials={getUserInitials(user.full_name)}
+            fallbackClassName="text-2xl font-bold"
+          />
+          <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Usuários
+              Perfil do Usuário
             </p>
             <h1 className="text-3xl font-bold tracking-tight">{user.full_name}</h1>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary">{roleLabels[user.role] || user.role}</Badge>
+              <Badge variant={user.is_active ? "success" : "destructive"}>
+                {user.is_active ? "Ativo" : "Inativo"}
+              </Badge>
+            </div>
           </div>
         </div>
         <div className="flex gap-2">

@@ -37,6 +37,7 @@ export default async function AdminUsersPage() {
       full_name: user.full_name,
       email: user.email,
       role: user.role,
+      photo_url: user.photo_url,
       is_active: user.is_active,
       company_name: companyName ?? null,
       job_name: jobName ?? null,

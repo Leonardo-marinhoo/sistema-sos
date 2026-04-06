@@ -34,6 +34,8 @@ export default async function NewEpiDeliveryPage() {
     return {
       id: employee.id,
       fullName: employee.full_name,
+      role: employee.role,
+      photoUrl: employee.photo_url,
       companyName: companyName ?? null,
       jobId: employee.job_id,
       jobName: jobName ?? null,

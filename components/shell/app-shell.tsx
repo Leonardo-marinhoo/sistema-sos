@@ -8,8 +8,7 @@ import { NAV_ITEMS, canAccessItem, NavModule } from "@/lib/auth/permissions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +17,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { signOut } from "@/app/actions/auth";
+import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar";
 import { cn } from "@/lib/utils";
 
 type ProfileLike = {
@@ -25,16 +25,8 @@ type ProfileLike = {
   role: string;
   is_superadmin: boolean;
   company_name?: string;
+  photo_url?: string | null;
 };
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
 
 const roleLabels: Record<string, string> = {
   employee: "Colaborador",
@@ -83,8 +75,8 @@ function SidebarContent({
   }));
 
   return (
-    <>
-      <div className="flex h-16 items-center gap-3 px-6 border-b">
+    <div className="flex h-full flex-col">
+      <div className="flex h-16 items-center gap-3 px-6 border-b shrink-0">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <Shield className="h-5 w-5" />
         </div>
@@ -94,13 +86,16 @@ function SidebarContent({
         </div>
       </div>
 
-      <div className="px-4 py-4">
+      <div className="px-4 py-4 shrink-0">
         <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
-          <Avatar className="h-10 w-10">
-            <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-              {getInitials(profile.full_name)}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            className="h-10 w-10"
+            src={getAvatarSrc(profile.photo_url, profile.role)}
+            fallbackSrc={getRoleAvatarFallback(profile.role)}
+            alt={profile.full_name}
+            initials={getUserInitials(profile.full_name)}
+            fallbackClassName="font-semibold"
+          />
           <div className="flex-1 min-w-0">
             <p className="truncate text-sm font-semibold">{profile.full_name}</p>
             <div className="flex flex-col gap-1 mt-1">
@@ -118,8 +113,8 @@ function SidebarContent({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 px-3">
-        <div className="space-y-6 pb-6">
+      <ScrollArea className="flex-1 min-h-0 px-3">
+        <div className="space-y-6 pb-4">
           {sections.map((section) =>
             section.items.length ? (
               <div key={section.title} className="space-y-1">
@@ -156,16 +151,15 @@ function SidebarContent({
         </div>
       </ScrollArea>
 
-      <Separator />
-      <div className="p-4">
+      <div className="shrink-0 border-t bg-card/50 p-3">
         <form action={signOut}>
-          <Button variant="outline" className="w-full justify-start gap-3">
+          <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10">
             <LogOut className="h-4 w-4" />
             Sair do sistema
           </Button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -185,7 +179,7 @@ export function AppShell({
     <div className="min-h-screen bg-background">
       <div className="flex min-h-screen">
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex w-64 flex-col border-r bg-card">
+        <aside className="hidden lg:flex w-64 flex-col border-r bg-card h-screen sticky top-0">
           <SidebarContent
             profile={profile}
             permissions={permissions}
@@ -240,11 +234,14 @@ export function AppShell({
               <Badge variant="secondary" className="hidden sm:flex">
                 {profile.is_superadmin ? "Superadmin" : roleLabels[profile.role] || profile.role}
               </Badge>
-              <Avatar className="h-8 w-8 lg:hidden">
-                <AvatarFallback className="text-xs bg-primary/10 text-primary font-semibold">
-                  {getInitials(profile.full_name)}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                className="h-8 w-8 lg:hidden"
+                src={getAvatarSrc(profile.photo_url, profile.role)}
+                fallbackSrc={getRoleAvatarFallback(profile.role)}
+                alt={profile.full_name}
+                initials={getUserInitials(profile.full_name)}
+                fallbackClassName="text-xs font-semibold"
+              />
             </div>
           </header>
 

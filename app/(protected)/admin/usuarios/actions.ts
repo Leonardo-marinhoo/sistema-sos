@@ -12,6 +12,7 @@ const createSchema = z.object({
   role: z.enum(["company_admin", "safety_technician", "employee"]),
   company_id: z.string().uuid(),
   job_id: z.union([z.string().uuid(), z.literal("none"), z.literal("")]).optional(),
+  photo_url: z.union([z.string().url(), z.literal("")]).optional(),
 });
 
 const updateSchema = z.object({
@@ -20,11 +21,18 @@ const updateSchema = z.object({
   role: z.enum(["company_admin", "safety_technician", "employee"]),
   is_active: z.enum(["true", "false"]),
   job_id: z.union([z.string().uuid(), z.literal("none"), z.literal("")]).optional(),
+  photo_url: z.union([z.string().url(), z.literal("")]).optional(),
 });
 
 function normalizeJobId(raw: string | undefined) {
   if (!raw || raw === "none") return null;
   return raw;
+}
+
+function normalizePhotoUrl(raw: string | undefined) {
+  if (!raw) return null;
+  const normalized = raw.trim();
+  return normalized.length > 0 ? normalized : null;
 }
 
 export async function createUser(formData: FormData) {
@@ -37,6 +45,7 @@ export async function createUser(formData: FormData) {
     role: formData.get("role"),
     company_id: formData.get("company_id"),
     job_id: formData.get("job_id"),
+    photo_url: formData.get("photo_url"),
   });
 
   if (!payload.success) throw new Error("Dados inválidos");
@@ -46,6 +55,7 @@ export async function createUser(formData: FormData) {
   }
 
   const normalizedJobId = payload.data.role === "employee" ? normalizeJobId(payload.data.job_id) : null;
+  const normalizedPhotoUrl = normalizePhotoUrl(payload.data.photo_url);
 
   if (normalizedJobId) {
     const { data: job, error: jobError } = await supabase
@@ -99,6 +109,7 @@ export async function createUser(formData: FormData) {
     role: payload.data.role,
     company_id: payload.data.company_id,
     job_id: normalizedJobId,
+    photo_url: normalizedPhotoUrl,
     created_by_user_id: profile.id,
   }).eq("auth_user_id", authUser.data.user.id);
 
@@ -119,6 +130,7 @@ export async function updateUser(formData: FormData) {
     role: formData.get("role"),
     is_active: formData.get("is_active"),
     job_id: formData.get("job_id"),
+    photo_url: formData.get("photo_url"),
   });
 
   if (!payload.success) throw new Error("Dados invalidos");
@@ -140,6 +152,7 @@ export async function updateUser(formData: FormData) {
   }
 
   const normalizedJobId = payload.data.role === "employee" ? normalizeJobId(payload.data.job_id) : null;
+  const normalizedPhotoUrl = normalizePhotoUrl(payload.data.photo_url);
 
   if (normalizedJobId) {
     const { data: job, error: jobError } = await supabase
@@ -163,6 +176,7 @@ export async function updateUser(formData: FormData) {
       full_name: payload.data.full_name,
       role: payload.data.role,
       job_id: normalizedJobId,
+      photo_url: normalizedPhotoUrl,
       is_active: payload.data.is_active === "true",
     })
     .eq("id", payload.data.id)

@@ -14,7 +14,7 @@ export async function requireSession() {
 
   const { data: profile } = await supabase
     .from("app_users")
-    .select("id,full_name,email,company_id,role,is_superadmin")
+    .select("id,full_name,email,company_id,role,is_superadmin,photo_url")
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
