@@ -7,6 +7,7 @@ import { withLogging } from "@/lib/logger/server-action-logger";
 
 const createDeliverySchema = z.object({
   employee_user_id: z.string().uuid(),
+  exchange_request_id: z.union([z.string().uuid(), z.literal("none"), z.literal("")]).optional(),
   receiver_signature_data_url: z.string().min(1, "Assinatura do colaborador e obrigatoria"),
   deliverer_signature_data_url: z.string().min(1, "Assinatura do Responsável e obrigatoria"),
 });
@@ -45,6 +46,7 @@ export async function createEpiDelivery(formData: FormData) {
 
     const payload = createDeliverySchema.safeParse({
       employee_user_id: formData.get("employee_user_id"),
+      exchange_request_id: formData.get("exchange_request_id"),
       receiver_signature_data_url: formData.get("receiver_signature_data_url")?.toString().trim() ?? "",
       deliverer_signature_data_url: formData.get("deliverer_signature_data_url")?.toString().trim() ?? "",
     });
@@ -110,6 +112,45 @@ export async function createEpiDelivery(formData: FormData) {
       throw new Error("Sem permissao para registrar entrega fora da sua empresa");
     }
 
+    const exchangeRequestId =
+      payload.data.exchange_request_id && payload.data.exchange_request_id !== "none"
+        ? payload.data.exchange_request_id
+        : null;
+
+    if (exchangeRequestId) {
+      const { data: exchangeRequest, error: exchangeRequestError } = await supabase
+        .from("epi_exchange_requests")
+        .select("id,company_id,employee_user_id,status")
+        .eq("id", exchangeRequestId)
+        .maybeSingle();
+
+      if (exchangeRequestError || !exchangeRequest) {
+        throw new Error("Solicitação de troca não encontrada");
+      }
+
+      if (exchangeRequest.company_id !== employee.company_id) {
+        throw new Error("A solicitação de troca deve pertencer à mesma empresa da entrega");
+      }
+
+      if (exchangeRequest.employee_user_id !== employee.id) {
+        throw new Error("A solicitação de troca deve pertencer ao colaborador selecionado");
+      }
+
+      if (exchangeRequest.status !== "approved") {
+        throw new Error("Somente solicitações aprovadas podem ser vinculadas a uma entrega");
+      }
+
+      const { data: existingDelivery } = await supabase
+        .from("epi_deliveries")
+        .select("id")
+        .eq("exchange_request_id", exchangeRequest.id)
+        .maybeSingle();
+
+      if (existingDelivery) {
+        throw new Error("Esta solicitação de troca já está vinculada a uma entrega");
+      }
+    }
+
     const { data: episData, error: episError } = await supabase
       .from("epis")
       .select("id,company_id")
@@ -134,6 +175,7 @@ export async function createEpiDelivery(formData: FormData) {
         company_id: employee.company_id,
         employee_user_id: employee.id,
         delivered_by_user_id: profile.id,
+        exchange_request_id: exchangeRequestId,
         receiver_signature_data_url: payload.data.receiver_signature_data_url,
         deliverer_signature_data_url: payload.data.deliverer_signature_data_url,
         created_by_user_id: profile.id,
@@ -160,6 +202,8 @@ export async function createEpiDelivery(formData: FormData) {
     }
 
     revalidatePath("/admin/entregas-epi");
+    revalidatePath("/admin/trocas-epi");
     revalidatePath(`/admin/entregas-epi/${delivery.id}`);
+    revalidatePath("/colaborador/trocas-epi");
   }, { action: "create", entityType: "epi_delivery", description: "Criação de entrega de EPI" });
 }

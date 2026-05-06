@@ -16,7 +16,7 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
   let deliveryQuery = supabase
     .from("epi_deliveries")
     .select(
-      "id,company_id,employee_user_id,delivered_by_user_id,receiver_signature_data_url,deliverer_signature_data_url,signature_file_url,photo_file_url,delivered_at,created_at"
+      "id,company_id,employee_user_id,delivered_by_user_id,exchange_request_id,receiver_signature_data_url,deliverer_signature_data_url,signature_file_url,photo_file_url,delivered_at,created_at"
     )
     .eq("id", id);
 
@@ -27,7 +27,7 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
   const { data: delivery } = await deliveryQuery.maybeSingle();
   if (!delivery) notFound();
 
-  const [{ data: employee }, { data: deliverer }, { data: items }, { data: company }] = await Promise.all([
+  const [{ data: employee }, { data: deliverer }, { data: items }, { data: company }, { data: exchangeRequest }] = await Promise.all([
     supabase.from("app_users").select("id,full_name,role,photo_url").eq("id", delivery.employee_user_id).maybeSingle(),
     supabase.from("app_users").select("id,full_name,role,photo_url").eq("id", delivery.delivered_by_user_id).maybeSingle(),
     supabase
@@ -37,6 +37,13 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
       .order("expires_at", { ascending: true }),
     profile.is_superadmin
       ? supabase.from("companies").select("id,name").eq("id", delivery.company_id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    delivery.exchange_request_id
+      ? supabase
+          .from("epi_exchange_requests")
+          .select("id,reason,status,review_note,evidence_photo_url,created_at,epis(code,name)")
+          .eq("id", delivery.exchange_request_id)
+          .maybeSingle()
       : Promise.resolve({ data: null }),
   ]);
 
@@ -119,6 +126,13 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
                 </div>
               </>
             )}
+            <Separator />
+            <div className="flex items-center justify-between gap-3 text-sm">
+              <span className="text-muted-foreground">Solicitação de troca</span>
+              <span className="font-medium text-right">
+                {delivery.exchange_request_id ? `#${delivery.exchange_request_id.slice(0, 8)}` : "Não vinculada"}
+              </span>
+            </div>
           </CardContent>
         </Card>
 
@@ -168,6 +182,58 @@ export default async function EpiDeliveryDetailPage({ params }: { params: Promis
           </CardContent>
         </Card>
       </div>
+
+      {exchangeRequest ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Solicitação de troca vinculada</CardTitle>
+            <CardDescription>
+              Esta entrega foi registrada como atendimento de uma solicitação aprovada.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4 md:grid-cols-[10rem_1fr]">
+            <a
+              href={exchangeRequest.evidence_photo_url}
+              target="_blank"
+              rel="noreferrer"
+              className="block h-40 overflow-hidden rounded-md border bg-muted"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={exchangeRequest.evidence_photo_url}
+                alt="Evidência da solicitação de troca"
+                className="h-full w-full object-cover"
+              />
+            </a>
+            <div className="space-y-3 text-sm">
+              {(() => {
+                const epiRel = exchangeRequest.epis as { code?: string; name?: string } | Array<{ code?: string; name?: string }> | null;
+                const epi = Array.isArray(epiRel) ? epiRel[0] : epiRel;
+
+                return (
+                  <div>
+                    <p className="font-semibold">
+                      {epi?.code ?? "EPI"} - {epi?.name ?? "Sem nome"}
+                    </p>
+                    <p className="mt-1 text-muted-foreground">
+                      Solicitada em {new Date(exchangeRequest.created_at).toLocaleString("pt-BR")}
+                    </p>
+                  </div>
+                );
+              })()}
+              <Separator />
+              <p>
+                <span className="font-medium">Motivo:</span> {exchangeRequest.reason}
+              </p>
+              {exchangeRequest.review_note ? (
+                <p>
+                  <span className="font-medium">Resposta:</span> {exchangeRequest.review_note}
+                </p>
+              ) : null}
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>

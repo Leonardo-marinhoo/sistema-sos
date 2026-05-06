@@ -5,11 +5,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { RoleOnboardingWizard } from "@/components/onboarding/role-onboarding-wizard";
 
 export default async function ColaboradorDashboardPage() {
   const { profile, supabase } = await requireSession();
   const nowIso = new Date().toISOString();
-  const expiresAtUpperBound = new Date(new Date(nowIso).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const today = nowIso.slice(0, 10);
+  const expiresAtUpperBound = new Date(new Date(nowIso).getTime() + 30 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
+  const { data: myDeliveries } = await supabase
+    .from("epi_deliveries")
+    .select("id")
+    .eq("employee_user_id", profile.id);
+
+  const deliveryIds = (myDeliveries ?? []).map((delivery) => delivery.id);
 
   // Buscar métricas do colaborador
   const [
@@ -18,11 +29,12 @@ export default async function ColaboradorDashboardPage() {
     { count: unreadNotificationsCount },
     { data: expiringEpis },
   ] = await Promise.all([
-    supabase
-      .from("epi_deliveries")
-      .select("id", { head: true, count: "exact" })
-      .eq("employee_user_id", profile.id)
-      .eq("status", "active"),
+    deliveryIds.length
+      ? supabase
+          .from("epi_delivery_items")
+          .select("id", { head: true, count: "exact" })
+          .in("delivery_id", deliveryIds)
+      : Promise.resolve({ count: 0 }),
     supabase
       .from("epi_exchange_requests")
       .select("id", { head: true, count: "exact" })
@@ -34,14 +46,15 @@ export default async function ColaboradorDashboardPage() {
       .eq("recipient_user_id", profile.id)
       .eq("is_read", false),
     // EPIs próximos do vencimento (30 dias)
-    supabase
-      .from("epi_deliveries")
-      .select("id, expires_at, epis(name)")
-      .eq("employee_user_id", profile.id)
-      .eq("status", "active")
-      .gte("expires_at", nowIso)
-      .lte("expires_at", expiresAtUpperBound)
-      .limit(5),
+    deliveryIds.length
+      ? supabase
+          .from("epi_delivery_items")
+          .select("id, expires_at, epis(name)")
+          .in("delivery_id", deliveryIds)
+          .gte("expires_at", today)
+          .lte("expires_at", expiresAtUpperBound)
+          .limit(5)
+      : Promise.resolve({ data: [] }),
   ]);
 
   const quickActions = [
@@ -82,6 +95,8 @@ export default async function ColaboradorDashboardPage() {
           Gerencie seus EPIs, acompanhe solicitações e veja suas notificações.
         </p>
       </div>
+
+      <RoleOnboardingWizard roleKey="employee" />
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

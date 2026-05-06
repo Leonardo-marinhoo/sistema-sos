@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { RoleOnboardingWizard } from "@/components/onboarding/role-onboarding-wizard";
+import type { RoleOnboardingKey } from "@/lib/onboarding-content";
 
 export default async function AdminDashboardPage() {
   const { profile, permissions, supabase } = await requireSession();
@@ -47,6 +49,12 @@ export default async function AdminDashboardPage() {
     administrator: "Administrador",
   };
 
+  const onboardingRole: RoleOnboardingKey = isSuperadmin
+    ? "superadmin"
+    : profile.role === "safety_technician"
+      ? "safety_technician"
+      : "company_admin";
+
   return (
     <div className="flex flex-col gap-8">
       {/* Header */}
@@ -65,6 +73,8 @@ export default async function AdminDashboardPage() {
             : "Gerencie os recursos da sua empresa."}
         </p>
       </div>
+
+      <RoleOnboardingWizard roleKey={onboardingRole} />
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

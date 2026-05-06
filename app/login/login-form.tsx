@@ -18,7 +18,7 @@ export function LoginForm() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", bounce: 0.35 }}
-      className="flex w-full max-w-[26rem] flex-col gap-6 rounded-[2rem] border bg-card/60 p-8 shadow-sm backdrop-blur-xl"     
+      className="flex w-full max-w-[26rem] flex-col gap-6 rounded-[2rem] border bg-card/78 p-8 shadow-[var(--shadow-elev-2)] backdrop-blur-xl"
     >
       <div className="flex flex-col items-center justify-center space-y-3 mb-2 text-center">
         <div className="bg-primary/10 p-3 rounded-2xl mb-2">
@@ -26,7 +26,7 @@ export function LoginForm() {
         </div>
         <div>
            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1">
-             Platforma de Seguranca
+             Plataforma de Segurança
            </p>
            <h1 className="text-3xl font-black text-foreground tracking-tight">SOS System</h1>
            <p className="text-sm text-muted-foreground mt-2">

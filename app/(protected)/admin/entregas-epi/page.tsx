@@ -12,7 +12,7 @@ export default async function EpiDeliveriesPage() {
 
   let deliveriesQuery = supabase
     .from("epi_deliveries")
-    .select("id,company_id,employee_user_id,delivered_by_user_id,delivered_at,created_at")
+    .select("id,company_id,employee_user_id,delivered_by_user_id,exchange_request_id,delivered_at,created_at")
     .order("created_at", { ascending: false });
 
   if (!profile.is_superadmin && profile.company_id) {
@@ -134,6 +134,10 @@ export default async function EpiDeliveriesPage() {
                   </p>
                   <p>
                     <span className="text-muted-foreground">Quantidade total:</span> {itemStats.totalQuantity}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Solicitação de troca:</span>{" "}
+                    {delivery.exchange_request_id ? `#${delivery.exchange_request_id.slice(0, 8)}` : "Não vinculada"}
                   </p>
                   <p>
                     <span className="text-muted-foreground">Data:</span>{" "}

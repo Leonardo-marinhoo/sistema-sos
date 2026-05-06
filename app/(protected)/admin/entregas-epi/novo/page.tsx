@@ -136,6 +136,46 @@ export default async function NewEpiDeliveryPage() {
     kitsByJob[jobId] = kitsByJob[jobId].sort((a, b) => a.epiName.localeCompare(b.epiName));
   }
 
+  let approvedRequestsQuery = supabase
+    .from("epi_exchange_requests")
+    .select("id,employee_user_id,epi_id,reason,created_at,epis(code,name)")
+    .eq("status", "approved")
+    .order("created_at", { ascending: false });
+
+  if (!profile.is_superadmin && profile.company_id) {
+    approvedRequestsQuery = approvedRequestsQuery.eq("company_id", profile.company_id);
+  }
+
+  const [{ data: approvedRequestsData }, { data: linkedDeliveriesData }] = await Promise.all([
+    approvedRequestsQuery,
+    supabase
+      .from("epi_deliveries")
+      .select("exchange_request_id")
+      .not("exchange_request_id", "is", null),
+  ]);
+
+  const linkedRequestIds = new Set(
+    (linkedDeliveriesData ?? [])
+      .map((delivery) => delivery.exchange_request_id)
+      .filter(Boolean),
+  );
+
+  const exchangeRequests = (approvedRequestsData ?? [])
+    .filter((request) => !linkedRequestIds.has(request.id))
+    .map((request) => {
+      const epiRel = request.epis as { code?: string; name?: string } | Array<{ code?: string; name?: string }> | null;
+      const epi = Array.isArray(epiRel) ? epiRel[0] : epiRel;
+
+      return {
+        id: request.id,
+        employeeUserId: request.employee_user_id,
+        epiCode: epi?.code ?? "EPI",
+        epiName: epi?.name ?? "Sem nome",
+        reason: request.reason,
+        createdAt: request.created_at,
+      };
+    });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
@@ -162,6 +202,7 @@ export default async function NewEpiDeliveryPage() {
           employees={employees}
           epis={epis}
           kitsByJob={kitsByJob}
+          exchangeRequests={exchangeRequests}
           showEmployeeCompany={profile.is_superadmin}
         />
       )}

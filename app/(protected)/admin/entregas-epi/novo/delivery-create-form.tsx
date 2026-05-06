@@ -45,6 +45,15 @@ type JobKitItem = {
   isMandatory: boolean;
 };
 
+type ExchangeRequestOption = {
+  id: string;
+  employeeUserId: string;
+  epiCode: string;
+  epiName: string;
+  reason: string;
+  createdAt: string;
+};
+
 type DeliveryRow = {
   key: string;
   epiId: string;
@@ -57,6 +66,7 @@ interface DeliveryCreateFormProps {
   employees: EmployeeOption[];
   epis: EpiOption[];
   kitsByJob: Record<string, JobKitItem[]>;
+  exchangeRequests: ExchangeRequestOption[];
   showEmployeeCompany: boolean;
 }
 
@@ -74,9 +84,11 @@ export function DeliveryCreateForm({
   employees,
   epis,
   kitsByJob,
+  exchangeRequests,
   showEmployeeCompany,
 }: DeliveryCreateFormProps) {
   const [employeeId, setEmployeeId] = useState(employees[0]?.id ?? "");
+  const [exchangeRequestId, setExchangeRequestId] = useState("none");
   const [rows, setRows] = useState<DeliveryRow[]>([createRow(0)]);
   const [receiverSignature, setReceiverSignature] = useState("");
   const [delivererSignature, setDelivererSignature] = useState("");
@@ -90,6 +102,21 @@ export function DeliveryCreateForm({
     if (!selectedEmployee?.jobId) return [];
     return kitsByJob[selectedEmployee.jobId] ?? [];
   }, [selectedEmployee, kitsByJob]);
+
+  const openExchangeRequests = useMemo(
+    () =>
+      exchangeRequests.filter(
+        (request) => request.employeeUserId === employeeId,
+      ),
+    [employeeId, exchangeRequests],
+  );
+
+  const selectedExchangeRequest = useMemo(
+    () =>
+      openExchangeRequests.find((request) => request.id === exchangeRequestId) ??
+      null,
+    [exchangeRequestId, openExchangeRequests],
+  );
 
   const addRow = () => {
     setRows((current) => [...current, createRow(current.length)]);
@@ -161,7 +188,10 @@ export function DeliveryCreateForm({
               id="employee_user_id"
               name="employee_user_id"
               value={employeeId}
-              onChange={(event) => setEmployeeId(event.target.value)}
+              onChange={(event) => {
+                setEmployeeId(event.target.value);
+                setExchangeRequestId("none");
+              }}
               className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               required
             >
@@ -176,6 +206,55 @@ export function DeliveryCreateForm({
               ))}
             </select>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Solicitação de troca vinculada</CardTitle>
+          <CardDescription>
+            Opcional. Selecione uma solicitação aprovada para relacionar esta
+            entrega à demanda do colaborador.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="space-y-2">
+            <Label htmlFor="exchange_request_id">Solicitação aprovada</Label>
+            <select
+              id="exchange_request_id"
+              name="exchange_request_id"
+              value={exchangeRequestId}
+              onChange={(event) => setExchangeRequestId(event.target.value)}
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="none">
+                Nenhuma solicitação vinculada
+              </option>
+              {openExchangeRequests.map((request) => (
+                <option key={request.id} value={request.id}>
+                  {request.epiCode} - {request.epiName} |{" "}
+                  {new Date(request.createdAt).toLocaleDateString("pt-BR")}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {!openExchangeRequests.length ? (
+            <p className="rounded-md border border-dashed border-border p-3 text-sm text-muted-foreground">
+              Este colaborador não possui solicitações aprovadas e sem entrega
+              vinculada.
+            </p>
+          ) : selectedExchangeRequest ? (
+            <div className="rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm">
+              <p className="font-semibold">
+                {selectedExchangeRequest.epiCode} -{" "}
+                {selectedExchangeRequest.epiName}
+              </p>
+              <p className="mt-1 leading-6 text-muted-foreground">
+                {selectedExchangeRequest.reason}
+              </p>
+            </div>
+          ) : null}
         </CardContent>
       </Card>
 
