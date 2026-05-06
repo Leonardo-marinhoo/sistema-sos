@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSuperAdmin } from "@/lib/auth/session";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { withLogging } from "@/lib/logger/server-action-logger";
 
 const roleEnum = z.enum(["superadmin", "company_admin", "safety_technician", "employee"]);
 
@@ -16,53 +17,61 @@ const userSchema = z.object({
 });
 
 export async function createCompanyUser(formData: FormData) {
-  const { supabase, profile } = await requireSuperAdmin();
+  return withLogging(
+    async () => {
+      const { supabase, profile } = await requireSuperAdmin();
 
-  const parsed = userSchema.safeParse({
-    full_name: formData.get("full_name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    role: formData.get("role"),
-    company_id: formData.get("company_id"),
-  });
+      const parsed = userSchema.safeParse({
+        full_name: formData.get("full_name"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+        role: formData.get("role"),
+        company_id: formData.get("company_id"),
+      });
 
-  if (!parsed.success) {
-    throw new Error("Dados invalidos para usuario.");
-  }
+      if (!parsed.success) {
+        throw new Error("Dados invalidos para usuario.");
+      }
 
-  if (parsed.data.role !== "superadmin" && !parsed.data.company_id) {
-    throw new Error("Usuarios nao-superadmin precisam de empresa.");
-  }
+      if (parsed.data.role !== "superadmin" && !parsed.data.company_id) {
+        throw new Error("Usuarios nao-superadmin precisam de empresa.");
+      }
 
-  const createdAuthUser = await supabaseAdmin.auth.admin.createUser({
-    email: parsed.data.email,
-    password: parsed.data.password,
-    email_confirm: true,
-    user_metadata: {
-      full_name: parsed.data.full_name,
+      const createdAuthUser = await supabaseAdmin.auth.admin.createUser({
+        email: parsed.data.email,
+        password: parsed.data.password,
+        email_confirm: true,
+        user_metadata: {
+          full_name: parsed.data.full_name,
+        },
+      });
+
+      if (createdAuthUser.error || !createdAuthUser.data.user) {
+        throw new Error(createdAuthUser.error?.message ?? "Falha ao criar credencial.");
+      }
+
+      const { error } = await supabase.from("app_users").upsert(
+        {
+          auth_user_id: createdAuthUser.data.user.id,
+          email: parsed.data.email,
+          full_name: parsed.data.full_name,
+          role: parsed.data.role,
+          company_id: parsed.data.role === "superadmin" ? null : parsed.data.company_id,
+          is_superadmin: parsed.data.role === "superadmin",
+          created_by_user_id: profile.id,
+        },
+        { onConflict: "auth_user_id" },
+      );
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      revalidatePath("/dashboard/users");
     },
-  });
-
-  if (createdAuthUser.error || !createdAuthUser.data.user) {
-    throw new Error(createdAuthUser.error?.message ?? "Falha ao criar credencial.");
-  }
-
-  const { error } = await supabase.from("app_users").upsert(
     {
-      auth_user_id: createdAuthUser.data.user.id,
-      email: parsed.data.email,
-      full_name: parsed.data.full_name,
-      role: parsed.data.role,
-      company_id: parsed.data.role === "superadmin" ? null : parsed.data.company_id,
-      is_superadmin: parsed.data.role === "superadmin",
-      created_by_user_id: profile.id,
-    },
-    { onConflict: "auth_user_id" },
+      action: "create",
+      entityType: "user",
+    }
   );
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  revalidatePath("/dashboard/users");
 }

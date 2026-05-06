@@ -70,6 +70,13 @@ export const NAV_ITEMS: NavItem[] = [
     module: "Superadmin",
     superadminOnly: true,
   },
+  {
+    label: "Métricas do Sistema",
+    href: "/admin/metricas",
+    icon: LayoutDashboard,
+    module: "Superadmin",
+    superadminOnly: true,
+  },
 
   // === EMPRESA (company_admin, safety_technician, administrator) ===
   {

@@ -19,8 +19,10 @@ import {
 import { signOut } from "@/app/actions/auth";
 import { getAvatarSrc, getRoleAvatarFallback, getUserInitials } from "@/lib/avatar";
 import { cn } from "@/lib/utils";
+import { PageMetricsTracker } from "@/components/shell/page-metrics-tracker";
 
 type ProfileLike = {
+  id: string;
   full_name: string;
   role: string;
   is_superadmin: boolean;
@@ -178,6 +180,8 @@ export function AppShell({
   return (
     <div className="min-h-screen bg-background">
       <div className="flex min-h-screen">
+        <PageMetricsTracker profile={profile} />
+
         {/* Desktop Sidebar */}
         <aside className="hidden lg:flex w-64 flex-col border-r bg-card h-screen sticky top-0">
           <SidebarContent
